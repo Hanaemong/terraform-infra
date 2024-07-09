@@ -60,13 +60,19 @@ resource "kubernetes_deployment" "new_hanalink_spring_boot_app" {
 resource "kubernetes_service" "new_hanalink_spring_boot_service" {
   metadata {
     name = "new-hanalink-spring-boot-service"
+    annotations = {
+      "service.beta.kubernetes.io/aws-load-balancer-type" : "alb"
+      "service.beta.kubernetes.io/aws-load-balancer-backend-protocol" : "HTTP"
+      "service.beta.kubernetes.io/aws-load-balancer-ssl-ports" : "443"
+      "service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout" : "60"
+    }
   }
   spec {
     selector = {
       app = "new-hanalink-spring-boot-app"
     }
     port {
-      port = 80
+      port = 8080
       target_port = 8080
     }
     type = "LoadBalancer"
@@ -109,6 +115,12 @@ resource "kubernetes_deployment" "new_hanalink_react_app" {
 resource "kubernetes_service" "new_hanalink_react_service" {
   metadata {
     name = "new-hanalink-react-service"
+    annotations = {
+      "service.beta.kubernetes.io/aws-load-balancer-type" : "alb"
+      "service.beta.kubernetes.io/aws-load-balancer-backend-protocol" : "HTTP"
+      "service.beta.kubernetes.io/aws-load-balancer-ssl-ports" : "443"
+      "service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout" : "60"
+    }
   }
   spec {
     selector = {
